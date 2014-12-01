@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/jquery-ui/css")
+    @Styles.Render("~/bundles/tabs")
+    @Styles.Render("~/Content/jqwidgets/css")
+</head>
+<body>
+    @RenderBody()
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryui")
+    @Scripts.Render("~/bundles/knockout")
+    @Scripts.Render("~/bundles/jqwidgets")
+    @Scripts.Render("~/bundles/jquerytabs")
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

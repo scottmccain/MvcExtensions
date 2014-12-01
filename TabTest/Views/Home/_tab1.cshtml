@@ -1,0 +1,42 @@
+﻿@using KnockoutHelpers
+@using Microsoft.Ajax.Utilities
+@model TabTest.Models.Tab1Model
+
+@using(Html.BeginForm("Home", "Home"))
+{
+    <div class="ui-helper-reset">
+        <h1>Tab 1 content *</h1>
+    
+        <p>
+            BlahBlah: @Html.KnockoutDisplayFor(m => m.SelectedItem, "text: Tab1Model.selectedItem")
+            @Html.KnockoutHiddenFor(m => m.SelectedItem, new { text = "Tab1Model.selectedItem", value = "Tab1Model.selectedItem" })
+        </p>
+    
+        @Html.KnockoutTextAreaFor(m => m.SomeText, cols: 40, rows: 5, bindings: new {value = "Tab1Model.text"})
+
+        <input class="text-box single-line" id="SomeText" name="SomeText" type="text" data-bind="value: Tab1Model.text"> <input type="submit" value="Submit" />
+        <p>
+            Text: <strong data-bind="text: Tab1Model.text"></strong>
+        </p>
+    
+        @*    @Html.KnockoutDropDownListFor(m => m.SomeText, Model.Items, "value: Tab1Model.selectedItem")*@
+    
+        @Html.KnockoutDropdownList(
+            new
+            {
+                value =  "Tab1Model.selectedItem", 
+                optionsCaption = "'Choose...'", 
+                optionsText = "function(item) { return item.code + '-' + item.Name; }", 
+                optionsValue = "'code'", 
+                options = "Tab1Model.items"
+                
+            }, new {style = "margin-bottom: 50px"})
+    
+    
+        <div id="jqxgrid"></div>
+        
+        <div style="margin-top:20px"></div>
+        <div id="jqxgrid2"></div>
+    </div>
+    
+}

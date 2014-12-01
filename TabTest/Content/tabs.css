@@ -1,0 +1,81 @@
+﻿.tabs {
+    width:100%;
+    display:inline-block;
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: .2em;
+}
+ 
+.tabs ul {
+    border: 1px solid #041a3b;
+    border-radius: 4px;
+    margin: 0;
+    padding: .2em .2em 0;
+    background: #041a3b url("Images/ui-bg_gloss-wave_75_041a3b_500x100.png") 50% 50% repeat-x;
+}
+
+/*----- Tab Links -----*/
+/* Clearfix */
+.tab-links:after {
+    display:block;
+    clear:both;
+    content:'';
+}
+ 
+.tab-links li {
+    margin:1px .2em 0 0;
+    float:left;
+    list-style:none;
+    position: relative;
+    padding: 0;
+    white-space: nowrap;
+    border-bottom-width: 0;
+    top: 0;
+}
+ 
+.tab-links a {
+    padding:9px 15px;
+    display:inline-block;
+    border-radius:5px 5px 0px 0px;
+    background:#010C52;
+    font-size:16px;
+    font-weight:600;
+    color:#333333;
+    transition:all linear 0.15s;
+    background: #93c3cd url("images/ui-bg_diagonals-small_50_93c3cd_40x40.png") 50% 50% repeat;
+    text-decoration: none;
+}
+/* #ccd3d2
+   #93c3cd 
+     */
+ 
+.tab-links a:hover {
+    background: #ccd232 url("images/ui-bg_diagonals-small_75_ccd232_40x40.png") 50% 50% repeat;
+    text-decoration:none;
+    color: #212121;
+}
+ 
+li.active a, li.active a:hover {
+    color:#ffffff;
+    border: 1px solid #ff6b7f;
+    margin-bottom: -1px;
+    border-bottom: 0;
+    z-index: 999;
+    text-decoration:none;
+    background: #db4865 url("images/ui-bg_diagonals-small_40_db4865_40x40.png") 50% 50% repeat;
+
+}
+ 
+/*----- Content of Tabs -----*/
+.tab-content {
+    padding:15px;
+    background:#fff;
+}
+ 
+.tab {
+    display:none;
+}
+ 
+.tab.active {
+    display:block;
+}

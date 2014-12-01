@@ -1,0 +1,145 @@
+﻿@using KnockoutHelpers
+@model TabTest.Models.HomeModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<div style="padding:10px;">
+    @Html.Tabs( ViewContext.Controller.ControllerContext, Model.TabList, "tablist", new { style = "height: 100%; overflow:auto;"})
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(function() {
+            $("#mytabs").tabs();
+
+            $("#tab1Items").selectmenu();
+
+            //var dataManger = ej.DataManager({
+            //    url: "http://mvc.syncfusion.com/Services/Northwnd.svc/Orders/"
+            //});
+
+            //$("#Grid").ejGrid({
+            //    dataSource: dataManger,
+            //    allowPaging: true,
+            //    pageSettings: { pageSize: 9 },
+            //    columns: [
+            //        { field: "OrderID", headerText: "Order ID", isPrimaryKey: true, width: 75, isIdentity: true, textAlign: ej.TextAlign.Right },
+            //        { field: "CustomerID", headerText: "Customer ID", width: 90 },
+            //        { field: "EmployeeID", headerText: "Employee ID", textAlign: ej.TextAlign.Right, width: 75 },
+            //        { field: "Freight", headerText: "Freight", textAlign: ej.TextAlign.Right, width: 75 ,format: "{0:C2}"},
+            //        { field: "ShipCity", headerText: "Ship City", width: 100 },
+            //        { field: "ShipCountry", headerText: 'Ship Country', width: 100 }
+            //    ]
+            //});
+
+            $('#tablist').Tabify();
+
+            function viewModels() {
+
+                this.Tab1Model = {
+                    @Html.KnockoutModelFor(Model.Tab1Model, true)
+                }
+
+                this.Tab2Model = {
+                    @Html.KnockoutModelFor(Model.Tab2Model, true)
+                }
+            }
+
+            ko.applyBindings(new viewModels());
+
+
+            // prepare the data
+            //var source =
+            //{
+            //    datatype: "jsonp",
+            //    datafields: [
+            //        { name: 'countryName', type: 'string' },
+            //        { name: 'name', type: 'string' },
+            //        { name: 'population', type: 'float' },
+            //        { name: 'continentCode', type: 'string' }
+            //    ],
+            //    url: "http://api.geonames.org/searchJSON"
+            //};
+
+            //var dataAdapter = new $.jqx.dataAdapter(source,
+            //    {
+            //        formatData: function (data) {
+            //            $.extend(data, {
+            //                featureClass: "P",
+            //                style: "full",
+            //                maxRows: 50,
+            //                username: "jqwidgets"
+            //            });
+            //            return data;
+            //        }
+            //    }
+            //);
+            //$("#jqxgrid").jqxGrid(
+            //{
+            //    width: 850,
+            //    source: dataAdapter,
+            //    columnsresize: true,
+            //    columns: [
+            //        { text: 'Country Name', datafield: 'countryName', width: 200 },
+            //        { text: 'City', datafield: 'name', width: 170 },
+            //        { text: 'Population', datafield: 'population', cellsformat: 'f', width: 170 },
+            //        { text: 'Continent Code', datafield: 'continentCode', minwidth: 110 }
+            //    ]
+            //});
+
+            var source =
+            {
+                datatype: "json",
+                datafields: [
+                    { name: 'Name', type: 'string' },
+                    { name: 'Color', type: 'string' },
+                    { name: 'StandardCost', type: 'number' },
+                    { name: 'ProductNumber', type: 'string' }
+                ],
+                url: '@Url.Action("AllProducts", "Northwind")',
+                root: 'Rows',
+                beforeprocessing: function (data) {
+                    source.totalrecords = data.TotalRows;
+                },
+                sort: function () {
+                    // update the grid and send a request to the server.
+                    $("#jqxgrid2").jqxGrid('updatebounddata');
+                },
+                filter: function () {
+                    // update the grid and send a request to the server.
+                    $("#jqxgrid2").jqxGrid('updatebounddata');
+                }
+            };
+
+            var dataAdapter = new $.jqx.dataAdapter(source);
+
+            $("#jqxgrid2").jqxGrid(
+            {
+                width: 850,
+                source: dataAdapter,
+                columnsresize: true,
+                autoheight: true,
+                pageable: true,
+                sortable: true,
+                filterable:true,
+                virtualmode: true,
+                rendergridrows: function () {
+                    return dataAdapter.records;
+                },
+                columns: [
+                    { text: 'Product Name', datafield: 'Name', width: 200, cellsalign: 'center' },
+                    { text: 'Color', datafield: 'Color', width: 170, cellsalign: 'right' },
+                    { text: 'Standard Cost', datafield: 'StandardCost', cellsformat: 'c2', width: 170, cellsalign: 'right' },
+                    { text: 'Product Number', datafield: 'ProductNumber', minwidth: 110, cellsalign: 'center' }
+                ]
+            });
+
+        });
+
+
+    </script>
+
+}
+
