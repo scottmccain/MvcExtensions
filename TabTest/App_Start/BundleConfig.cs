@@ -42,6 +42,9 @@ namespace TabTest
                 "~/Scripts/jqwidgets/jqxgrid.selection.js",
                 "~/Scripts/jqwidgets/jqxgrid.filter.js",
                 "~/Scripts/jqwidgets/jqxcheckbox.js",
+                "~/Scripts/jqwidgets/jqxgrid.columnsreorder.js",
+                "~/Scripts/jqwidgets/jqxgrid.edit.js",
+                "~/Scripts/jqwidgets/jqxnumberinput.js",
                 "~/Scripts/jqwidgets/jqxlistbox.js",
                 "~/Scripts/jqwidgets/jqxdropdownlist.js",
                 "~/Scripts/jqwidgets/jqxgrid.selection.js",
@@ -82,7 +85,8 @@ namespace TabTest
 
             
             bundles.Add(new StyleBundle("~/Content/jqwidgets/css").Include(
-                "~/Content/jqwidgets/styles/jqx.base.css"));
+                "~/Content/jqwidgets/styles/jqx.base.css",
+                "~/Content/jqwidgets/styles/jqx.energyblue.css"));
 
             bundles.Add(new StyleBundle("~/Content/themes/base/css").Include(
                         "~/Content/themes/base/jquery.ui.core.css",

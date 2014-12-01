@@ -141,6 +141,7 @@
     <Compile Include="Helpers\StringExtensions.cs" />
     <Compile Include="MappingProfiles\DataToDomainMappingProfile.cs" />
     <Compile Include="MappingProfiles\DomainToDataMappingProfile.cs" />
+    <Compile Include="Models\ProductCategoryModel.cs" />
     <Compile Include="Models\ProductsGridModel.cs" />
     <Compile Include="Models\Department.cs" />
     <Compile Include="Repository\ExpressionBuilder.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="Models\Tab1Model.cs" />
     <Compile Include="Models\Tab2Model.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\ProductCategoryRepository.cs" />
     <Compile Include="Repository\ProductRepository.cs" />
   </ItemGroup>
   <ItemGroup>

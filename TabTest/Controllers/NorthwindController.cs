@@ -15,13 +15,34 @@ namespace TabTest.Controllers
         //private readonly AutoMapperMapper _mapper = new AutoMapperMapper();
 
         readonly ProductRepository _productRepository = new ProductRepository();
+        readonly ProductCategoryRepository _productCategoryRepository = new ProductCategoryRepository();
 
-        public ActionResult AllProducts(int pagenum = 0, int pagesize = 0, string sortDataField = null, string sortOrder = null)
+        public ActionResult AllProducts(int pagenum = 0, int pagesize = 0, string sortDataField = null, string sortOrder = null, string nameSearch = null)
         {
             var filter = MakeFilter(pagenum, pagesize, sortDataField, sortOrder);
 
+            if (!string.IsNullOrEmpty(nameSearch))
+            {
+                filter.Filters.Add(new ColumnFilter
+                {
+                    ColumnName = "Name",
+                    Condition = FilterCondition.ContainsCaseSensitive,
+                    Value = nameSearch
+                });
+            }
             var result = _productRepository.GetProductsFiltered(filter);
             return Json(new ProductsGridModel { TotalRows = result.Item1, Rows = result.Item2}, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Categories()
+        {
+            return Json(new { Categories = _productCategoryRepository.GetCategories() }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateProduct(ProductModel model)
+        {
+            return Json(new {success = _productRepository.UpdateProduct(model)});
         }
 
         private GridFilter MakeFilter(int pagenum, int pagesize, string sortDataField, string sortOrder)
@@ -71,6 +92,7 @@ namespace TabTest.Controllers
 
             return list;
         }
+
 
     }
 }

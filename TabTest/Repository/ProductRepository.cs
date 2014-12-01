@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Linq.DynamicQuery;
@@ -18,11 +19,36 @@ namespace TabTest.Repository
 
         private readonly Dictionary<string, Type> _columnDictionary = new Dictionary<string, Type>
         {
-            { "ProductName", typeof(String) },
+            { "Name", typeof(String) },
             { "ProductNumber", typeof(String) },
             { "Color", typeof(String) },
-            { "StandardCost", typeof(decimal) }
-        }; 
+            { "StandardCost", typeof(decimal) },
+            { "ProductCategory.Name", typeof(string)}
+        };
+
+        public bool UpdateProduct(ProductModel model)
+        {
+            using (var ctx = new AdventureWorksLT2008R2Entities())
+            {
+                // find old record first
+                var record = ctx.Products.Find(model.ProductID);
+                if (record == null) return false;
+
+                var category = ctx.ProductCategories.Find(model.ProductCategoryID);
+
+                record.ProductNumber = model.ProductNumber;
+                record.StandardCost = model.StandardCost;
+                record.Name = model.Name;
+                record.Color = model.Color;
+                record.ProductCategory = category;
+
+                ctx.Products.Attach(record);
+                ctx.Entry(record).State = EntityState.Modified;
+                ctx.SaveChanges();
+
+                return true;
+            }
+        }
 
         public Tuple<int, IEnumerable<ProductModel>> GetProductsFiltered(GridFilter filter)
         {
@@ -69,6 +95,9 @@ namespace TabTest.Repository
                         }
                     }
 
+                    if (field.ColumnName == "ProductCategoryName")
+                        field.ColumnName = "ProductCategory.Name";
+
                     var expression = ExpressionBuilder.GetExpression(field.ColumnName, field.Condition, field.Value,
                         _columnDictionary[field.ColumnName]);
 
@@ -82,6 +111,9 @@ namespace TabTest.Repository
 
             if (!string.IsNullOrEmpty(filter.SortField))
             {
+                if (filter.SortField == "ProductCategoryName")
+                    filter.SortField = "ProductCategoryID";
+
                 if (filter.SortOrder == FilterSortOrder.Desc)
                     query = query.OrderBy(filter.SortField + " DESC");
                 else
