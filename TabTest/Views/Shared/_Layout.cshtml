@@ -8,15 +8,25 @@
     @Styles.Render("~/bundles/tabs")
     @Styles.Render("~/Content/jqwidgets/css")
 </head>
-<body>
-    @RenderBody()
+    <body>
+        @Html.Partial("_menu")
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/jqueryui")
-    @Scripts.Render("~/bundles/knockout")
-    @Scripts.Render("~/bundles/jqwidgets")
-    @Scripts.Render("~/bundles/jquerytabs")
+        @RenderBody()
 
-    @RenderSection("scripts", required: false)
-</body>
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/jqueryui")
+        @Scripts.Render("~/bundles/knockout")
+        @Scripts.Render("~/bundles/jqwidgets")
+        @Scripts.Render("~/bundles/jquerytabs")
+
+        @RenderSection("scripts", required: false)
+        
+        <script>
+            $(function() {
+                $("#jqxMenu").jqxMenu({ width: '100%', height: '30px' });
+                $("#jqxMenu").css('visibility', 'visible');
+            });
+        </script>
+
+    </body>
 </html>

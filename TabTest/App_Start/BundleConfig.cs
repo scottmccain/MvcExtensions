@@ -37,6 +37,7 @@ namespace TabTest
                 "~/Scripts/jqwidgets/jqxscrollbar.js",
                 "~/Scripts/jqwidgets/jqxmenu.js",
                 "~/Scripts/jqwidgets/jqxgrid.js",
+                "~/Scripts/jqwidgets/jqxtabs.js",
                 "~/Scripts/jqwidgets/jqxgrid.pager.js",
                 "~/Scripts/jqwidgets/jqxgrid.sort.js",
                 "~/Scripts/jqwidgets/jqxgrid.selection.js",

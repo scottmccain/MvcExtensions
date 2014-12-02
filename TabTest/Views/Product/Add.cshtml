@@ -1,0 +1,49 @@
+﻿@model TabTest.Models.ProductModel
+@{
+    ViewBag.Title = "Add";
+}
+
+<style type="text/css">
+    .text-input
+    {
+        height: 21px;
+        width: 150px;
+    }
+    .product-table
+    {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .product-table td, 
+    .product-table tr
+    {
+        margin: 0px;
+        padding: 2px;
+        border-spacing: 0px;
+        border-collapse: collapse;
+        font-family: Verdana;
+        font-size: 12px;
+    }
+    h3 
+    {
+        display: inline-block;
+        margin: 0px;
+    }    
+</style>
+
+<div id="product">
+    <div><h3>Add Product</h3></div>
+    <div>
+        @using(Html.BeginForm("Add"))
+        {
+            <table class="product-table">
+                <tr>
+                    <td>
+                        @Html.LabelFor(m => m.Name)
+                    </td>
+                    <td>@Html.TextBoxFor(m => m.Name, new { @class = "text-input"})</td>
+                </tr>
+            </table>
+        }
+    </div>
+</div>

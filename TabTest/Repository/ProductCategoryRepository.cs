@@ -15,7 +15,7 @@ namespace TabTest.Repository
         {
             using (var ctx = new AdventureWorksLT2008R2Entities())
             {
-                return _mapper.Map<List<ProductCategoryModel>>(ctx.ProductCategories.ToList());
+                return _mapper.Map<List<ProductCategoryModel>>(ctx.ProductCategories.OrderBy(p => p.Name).ToList());
             }
         }
     }

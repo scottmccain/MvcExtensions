@@ -5,18 +5,31 @@
 }
 
 <div style="padding:10px;">
-    @Html.Tabs( ViewContext.Controller.ControllerContext, Model.TabList, "tablist", new { style = "height: 100%; overflow:auto;"})
+@*    @Html.Tabs( ViewContext.Controller.ControllerContext, Model.TabList, "tablist", new { style = "margin: 10px 5px 0px 0px; overflow:auto;"})*@
+</div>
+
+<div id='jqxTabs'>
+    <ul style='margin-left: 30px;'>
+        <li>Tab 1</li>
+        <li>Tab 2</li>
+    </ul>
+    <div class="tab-content">
+        @Html.Partial("_tab1", Model.Tab1Model)
+    </div>
+    <div class="tab-content">
+        @Html.Partial("_tab2", Model.Tab2Model)
+    </div>
 </div>
 
 @section scripts{
     <script type="text/javascript">
 
         $(function() {
-            $("#mytabs").tabs();
+            $("#jqxTabs").jqxTabs({autoHeight: true});
 
             $("#tab1Items").selectmenu();
 
-            $('#tablist').Tabify();
+            //$('#tablist').Tabify();
 
             function viewModels() {
 
@@ -32,11 +45,11 @@
             ko.applyBindings(new viewModels());
 
             var categorysource =
-                   {
-                       datatype: "json",
-                       url: '@Url.Action("Categories", "Northwind")',
-                       root: 'Categories'
-                   };
+            {
+                datatype: "json",
+                url: '@Url.Action("Categories", "Northwind")',
+                root: 'Categories'
+            };
 
             var categoryAdapter = new $.jqx.dataAdapter(categorysource);
 
@@ -44,7 +57,7 @@
             {
                 datatype: "json",
                 datafields: [
-                    { name: 'ProductID', type: 'number'},
+                    { name: 'ProductID', type: 'number' },
                     { name: 'Name', type: 'string' },
                     { name: 'Color', type: 'string' },
                     { name: 'StandardCost', type: 'number' },
@@ -54,18 +67,18 @@
                 ],
                 url: '@Url.Action("AllProducts", "Northwind")',
                 root: 'Rows',
-                beforeprocessing: function (data) {
+                beforeprocessing: function(data) {
                     source.totalrecords = data.TotalRows;
                 },
-                sort: function () {
+                sort: function() {
                     // update the grid and send a request to the server.
                     $("#jqxgrid2").jqxGrid('updatebounddata');
                 },
-                filter: function () {
+                filter: function() {
                     // update the grid and send a request to the server.
                     $("#jqxgrid2").jqxGrid('updatebounddata');
                 },
-                updaterow: function (rowid, rowdata, commit) {
+                updaterow: function(rowid, rowdata, commit) {
                     // synchronize with the server - send update command
                     var data = "ProductCategoryID=" + rowdata.ProductCategoryID + "&ProductID=" + rowdata.ProductID + "&Name=" + rowdata.Name + "&ProductNumber=" + rowdata.ProductNumber + "&StandardCost=" + rowdata.StandardCost + "&Color=" + rowdata.Color;
                     $.ajax({
@@ -74,10 +87,15 @@
                         data: data,
                         type: 'POST',
                         success: function (returndata, status, xhr) {
+                            if (returndata.success)
                             // update command is executed.
-                            commit(true);
+                                commit(true);
+                            else {
+                                alert('bad');
+                                commit(false);
+                            }
                         },
-                        error: function () {
+                        error: function() {
                             // cancel changes.
                             commit(false);
                         }
@@ -86,7 +104,7 @@
             };
 
             var dataAdapter = new $.jqx.dataAdapter(source, {
-                formatData: function (data) {
+                formatData: function(data) {
                     console.log(data);
                     data.nameSearch = $("#searchField").val();
                     return data;
@@ -101,58 +119,76 @@
                 source: dataAdapter,
                 pageable: true,
                 sortable: true,
-                filterable:true,
+                filterable: true,
                 virtualmode: true,
                 editable: true,
                 editmode: 'dblclick',
-                rendergridrows: function () {
+                rendergridrows: function() {
                     return dataAdapter.records;
                 },
-                updatefilterconditions: function (type, defaultconditions) {
-                    var stringcomparisonoperators = ['EMPTY', 'NOT_EMPTY', 'CONTAINS_CASE_SENSITIVE',
-                    'DOES_NOT_CONTAIN_CASE_SENSITIVE', 'STARTS_WITH_CASE_SENSITIVE',
-                    'ENDS_WITH_CASE_SENSITIVE', 'EQUAL_CASE_SENSITIVE', 'NULL', 'NOT_NULL'];
+                updatefilterconditions: function(type, defaultconditions) {
+                    var stringcomparisonoperators = [
+                        'EMPTY', 'NOT_EMPTY', 'CONTAINS_CASE_SENSITIVE',
+                        'DOES_NOT_CONTAIN_CASE_SENSITIVE', 'STARTS_WITH_CASE_SENSITIVE',
+                        'ENDS_WITH_CASE_SENSITIVE', 'EQUAL_CASE_SENSITIVE', 'NULL', 'NOT_NULL'
+                    ];
                     var numericcomparisonoperators = ['EQUAL', 'NOT_EQUAL', 'LESS_THAN', 'LESS_THAN_OR_EQUAL', 'GREATER_THAN', 'GREATER_THAN_OR_EQUAL', 'NULL', 'NOT_NULL'];
                     var datecomparisonoperators = ['EQUAL', 'NOT_EQUAL', 'LESS_THAN', 'LESS_THAN_OR_EQUAL', 'GREATER_THAN', 'GREATER_THAN_OR_EQUAL', 'NULL', 'NOT_NULL'];
                     var booleancomparisonoperators = ['EQUAL', 'NOT_EQUAL'];
                     switch (type) {
-                        case 'stringfilter':
-                            return stringcomparisonoperators;
-                        case 'numericfilter':
-                            return numericcomparisonoperators;
-                        case 'datefilter':
-                            return datecomparisonoperators;
-                        case 'booleanfilter':
-                            return booleancomparisonoperators;
+                    case 'stringfilter':
+                        return stringcomparisonoperators;
+                    case 'numericfilter':
+                        return numericcomparisonoperators;
+                    case 'datefilter':
+                        return datecomparisonoperators;
+                    case 'booleanfilter':
+                        return booleancomparisonoperators;
                     }
                 },
                 showtoolbar: true,
-                rendertoolbar: function (toolbar) {
+                rendertoolbar: function(toolbar) {
                     var me = this;
                     var container = $("<div style='margin: 5px;'></div>");
-                    var span = $("<span style='float: left; margin-top: 5px; margin-right: 4px;'>Search City: </span>");
+                    var span = $("<span style='float: left; margin-top: 5px; margin-right: 4px;'>Search Products: </span>");
                     var input = $("<input class='jqx-input jqx-widget-content jqx-rc-all' id='searchField' type='text' style='height: 23px; float: left; width: 223px;' />");
+
+
                     toolbar.append(container);
                     container.append(span);
                     container.append(input);
+                    container.append('<input id="addrowbutton" style="float:right;" type="button" value="New Product" />');
+                    $("#addrowbutton").jqxButton();
+
+                    // create new row.
+                    $("#addrowbutton").on('click', function() {
+                        //var row = {};
+
+                        //row["ProductName"] = "New";
+
+                        //$("#jqxgrid2").jqxGrid('addrow', null, row);
+
+                        window.location = '@Url.Action("Add", "Product")';
+                    });
+
+
                     //if (theme != "") {
                     //    input.addClass('jqx-widget-content-' + theme);
                     //    input.addClass('jqx-rc-all-' + theme);
                     //}
                     var oldVal = "";
-                    input.on('keydown', function (event) {
+                    input.on('keydown', function(event) {
                         if (input.val().length >= 2) {
                             if (me.timer) {
                                 clearTimeout(me.timer);
                             }
                             if (oldVal != input.val()) {
-                                me.timer = setTimeout(function () {
+                                me.timer = setTimeout(function() {
                                     $("#jqxgrid2").jqxGrid('updatebounddata');
                                 }, 1000);
                                 oldVal = input.val();
                             }
-                        }
-                        else {
+                        } else {
                             $("#jqxgrid2").jqxGrid('updatebounddata');
                         }
                     });
@@ -166,26 +202,42 @@
                     { datafield: 'ProductID', hidden: true },
                     { text: 'Product Name', datafield: 'Name', width: 200, cellsalign: 'center' },
                     {
-                        text: 'Color', datafield: 'Color', width: 70, cellsalign: 'right'
+                        text: 'Color',
+                        datafield: 'Color',
+                        width: 70,
+                        cellsalign: 'right'
                     },
                     {
-                        text: 'Standard Cost', datafield: 'StandardCost', cellsformat: 'c2', width: 130, columntype: 'numberinput', cellsalign: 'right',
-                        initeditor: function (row, cellvalue, editor) {
+                        text: 'Standard Cost',
+                        datafield: 'StandardCost',
+                        cellsformat: 'c2',
+                        width: 130,
+                        columntype: 'numberinput',
+                        cellsalign: 'right',
+                        initeditor: function(row, cellvalue, editor) {
                             editor.jqxNumberInput({ decimalDigits: 2 });
                         }
                     },
                     { text: 'Product Number', datafield: 'ProductNumber', width: 150, cellsalign: 'center' },
                     {
-                        text: 'Product Category', datafield: 'ProductCategoryID', displayfield: 'ProductCategoryName', minwidth: 110, cellsalign: 'center', columntype: 'dropdownlist',
-                        createeditor: function (row, value, editor) {
+                        text: 'Product Category',
+                        datafield: 'ProductCategoryID',
+                        displayfield: 'ProductCategoryName',
+                        minwidth: 110,
+                        cellsalign: 'center',
+                        columntype: 'dropdownlist',
+                        createeditor: function(row, value, editor) {
                             editor.jqxDropDownList({ source: categoryAdapter, displayMember: 'Name', valueMember: 'ProductCategoryID' });
                         }
                     }
-             ]}).bind('bindingcomplete', function () {
+                ]
+            }).bind('bindingcomplete', function() {
                 var localizationobj = {};
-                var filterstringcomparisonoperators = ['empty', 'not empty', 'contains(match case)',
-                        'does not contain(match case)', 'starts with(match case)',
-                        'ends with(match case)', 'equal(match case)', 'null', 'not null'];
+                var filterstringcomparisonoperators = [
+                    'empty', 'not empty', 'contains(match case)',
+                    'does not contain(match case)', 'starts with(match case)',
+                    'ends with(match case)', 'equal(match case)', 'null', 'not null'
+                ];
                 var filternumericcomparisonoperators = ['equal', 'not equal', 'less than', 'less than or equal', 'greater than', 'greater than or equal', 'null', 'not null'];
                 var filterdatecomparisonoperators = ['equal', 'not equal', 'less than', 'less than or equal', 'greater than', 'greater than or equal', 'null', 'not null'];
                 var filterbooleancomparisonoperators = ['equal', 'not equal'];
