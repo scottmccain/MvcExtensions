@@ -15,8 +15,8 @@ namespace TabTest.Controllers
         {
             var model = new HomeModel
             {
-                Tab1Model = MakeTab1Model(),
-                Tab2Model = new Tab2Model()
+                ProductTabModel = new ProductTabModel(),
+                ProductCategoryTabModel = MakeTab2Model()
             };
 
             model.TabList = GetTabList(model);
@@ -31,44 +31,45 @@ namespace TabTest.Controllers
                 new TabListItem
                 {
                     IsPartial = true,
-                    Model = model.Tab1Model,
+                    Model = model.ProductTabModel,
                     TabHeader = "Tab 1",
                     TemplatePath = "_tab1"
                 },
                 new TabListItem
                 {
                     IsPartial = true,
-                    Model = model.Tab2Model,
+                    Model = model.ProductCategoryTabModel,
                     TabHeader = "Tab 2",
                     TemplatePath = "_tab2"
                 }
             };
         }
 
-        private static Tab1Model MakeTab1Model()
+        private static ProductCategoryTabModel MakeTab2Model()
         {
-            var tab1Model = new Tab1Model();
-
-            tab1Model.Departments = new List<Department>
+            var model = new ProductCategoryTabModel
             {
-                new Department { Name = "Human Resources", Code = "HR"},
-                new Department { Name = "Executive", Code = "EXC"},
-                new Department { Name = "Engineering", Code = "ENG"},
+                Departments = new List<Department>
+                {
+                    new Department {Name = "Human Resources", Code = "HR"},
+                    new Department {Name = "Executive", Code = "EXC"},
+                    new Department {Name = "Engineering", Code = "ENG"},
+                }
             };
 
-            tab1Model.Items = tab1Model.Departments
+            model.Items = model.Departments
                                 .MakeSelectList(
                                     t => t.Code,
                                     t => string.Format("{0} - {1}", t.Code, t.Name), 
                                     t => false);
                 
-            tab1Model.SomeText = "Text Here";
+            model.SomeText = "Text Here";
 
-            return tab1Model;
+            return model;
         }
 
         [HttpPost]
-        public ActionResult Home(Tab1Model model)
+        public ActionResult Home(ProductTabModel model)
         {
             return RedirectToAction("Index");
         }

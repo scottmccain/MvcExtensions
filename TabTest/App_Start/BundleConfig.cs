@@ -43,6 +43,7 @@ namespace TabTest
                 "~/Scripts/jqwidgets/jqxgrid.selection.js",
                 "~/Scripts/jqwidgets/jqxgrid.filter.js",
                 "~/Scripts/jqwidgets/jqxcheckbox.js",
+                "~/Scripts/jqwidgets/jqxwindow.js",
                 "~/Scripts/jqwidgets/jqxgrid.columnsreorder.js",
                 "~/Scripts/jqwidgets/jqxgrid.edit.js",
                 "~/Scripts/jqwidgets/jqxnumberinput.js",

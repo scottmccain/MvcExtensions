@@ -1,0 +1,30 @@
+﻿@model TabTest.Models.ProductCategoryTabModel
+@using KnockoutHelpers
+
+@using (Html.BeginForm("Home", "Home"))
+{
+    <h1>Product Categories</h1>
+    <p>
+        BlahBlah: @Html.KnockoutDisplayFor(m => m.SelectedItem, "text: ProductCategoryModel.selectedItem")
+        @Html.KnockoutHiddenFor(m => m.SelectedItem, new {text = "ProductCategoryModel.selectedItem", value = "ProductCategoryModel.selectedItem"})
+    </p>
+
+    @Html.KnockoutTextAreaFor(m => m.SomeText, cols: 40, rows: 5, bindings: new {value = "ProductCategoryModel.text"})
+
+    <input class="text-box single-line" id="SomeText" name="SomeText" type="text" data-bind="value: ProductCategoryModel.text">
+    <input type="submit" value="Submit" />
+    <p>
+        Text: <strong data-bind="text: ProductCategoryModel.text"></strong>
+    </p>
+
+    @Html.KnockoutDropdownList(
+        new
+        {
+            value = "ProductCategoryModel.selectedItem",
+            optionsCaption = "'Choose...'",
+            optionsText = "function(item) { return item.code + '-' + item.Name; }",
+            optionsValue = "'code'",
+            options = "ProductCategoryModel.items"
+
+        }, new {style = "margin-bottom: 50px"})
+}

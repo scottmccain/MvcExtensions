@@ -10,14 +10,23 @@
 
 <div id='jqxTabs'>
     <ul style='margin-left: 30px;'>
-        <li>Tab 1</li>
-        <li>Tab 2</li>
+        <li>Products</li>
+        <li>Product Categories</li>
     </ul>
     <div class="tab-content">
-        @Html.Partial("_tab1", Model.Tab1Model)
+        @Html.Partial("_productTab", Model.ProductTabModel)
     </div>
     <div class="tab-content">
-        @Html.Partial("_tab2", Model.Tab2Model)
+        @Html.Partial("_productCategoryTab", Model.ProductCategoryTabModel)
+    </div>
+</div>
+
+<div id="window">
+    <div id="windowHeader">
+        <h3>Add Product</h3>
+    </div>
+    <div style="overflow: hidden;" id="windowContent">
+        <div id="buttonbar" style="padding:10px;"><input type="button" id="product-cancel" value="Cancel" style="margin-right: 5px;"/><input type="button" id="product-save" value="Save"/></div>
     </div>
 </div>
 
@@ -33,12 +42,12 @@
 
             function viewModels() {
 
-                this.Tab1Model = {
-                    @Html.KnockoutModelFor(Model.Tab1Model, true)
+                this.ProductModel = {
+                    @Html.KnockoutModelFor(Model.ProductTabModel, true)
                 }
 
-                this.Tab2Model = {
-                    @Html.KnockoutModelFor(Model.Tab2Model, true)
+                this.ProductCategoryModel = {
+                    @Html.KnockoutModelFor(Model.ProductCategoryTabModel, true)
                 }
             }
 
@@ -72,11 +81,11 @@
                 },
                 sort: function() {
                     // update the grid and send a request to the server.
-                    $("#jqxgrid2").jqxGrid('updatebounddata');
+                    $("#jqxProductGrid").jqxGrid('updatebounddata');
                 },
                 filter: function() {
                     // update the grid and send a request to the server.
-                    $("#jqxgrid2").jqxGrid('updatebounddata');
+                    $("#jqxProductGrid").jqxGrid('updatebounddata');
                 },
                 updaterow: function(rowid, rowdata, commit) {
                     // synchronize with the server - send update command
@@ -106,12 +115,12 @@
             var dataAdapter = new $.jqx.dataAdapter(source, {
                 formatData: function(data) {
                     console.log(data);
-                    data.nameSearch = $("#searchField").val();
+                    data.nameSearch = $("#productSearchField").val();
                     return data;
                 }
             });
 
-            $("#jqxgrid2").jqxGrid(
+            $("#jqxProductGrid").jqxGrid(
             {
                 width: 850,
                 autoheight: true,
@@ -151,45 +160,42 @@
                     var me = this;
                     var container = $("<div style='margin: 5px;'></div>");
                     var span = $("<span style='float: left; margin-top: 5px; margin-right: 4px;'>Search Products: </span>");
-                    var input = $("<input class='jqx-input jqx-widget-content jqx-rc-all' id='searchField' type='text' style='height: 23px; float: left; width: 223px;' />");
-
+                    var input = $("<input class='jqx-input jqx-widget-content jqx-rc-all' id='productSearchField' type='text' style='height: 23px; float: left; width: 223px;' />");
 
                     toolbar.append(container);
                     container.append(span);
                     container.append(input);
-                    container.append('<input id="addrowbutton" style="float:right;" type="button" value="New Product" />');
-                    $("#addrowbutton").jqxButton();
+                    container.append('<input id="clearProductFilterButton" style="float:left;" type="button" value="Clear Filter" />');
+                    container.append('<input id="addProductButton" style="float:right;" type="button" value="New Product" />');
+
+
+                    $("#clearProductFilterButton").jqxButton();
+                    $("#addProductButton").jqxButton();
 
                     // create new row.
-                    $("#addrowbutton").on('click', function() {
-                        //var row = {};
-
-                        //row["ProductName"] = "New";
-
-                        //$("#jqxgrid2").jqxGrid('addrow', null, row);
-
-                        window.location = '@Url.Action("Add", "Product")';
+                    $("#addProductButton").on('click', function() {
+                        $('#window').jqxWindow('open');
                     });
 
+                    $("#clearProductFilterButton").on('click', function () {
+                        input.val('');
+                        $("#jqxProductGrid").jqxGrid('updatebounddata');
+                    });
 
-                    //if (theme != "") {
-                    //    input.addClass('jqx-widget-content-' + theme);
-                    //    input.addClass('jqx-rc-all-' + theme);
-                    //}
                     var oldVal = "";
-                    input.on('keydown', function(event) {
+                    input.on('keyup', function(event) {
                         if (input.val().length >= 2) {
                             if (me.timer) {
                                 clearTimeout(me.timer);
                             }
                             if (oldVal != input.val()) {
                                 me.timer = setTimeout(function() {
-                                    $("#jqxgrid2").jqxGrid('updatebounddata');
-                                }, 1000);
+                                    $("#jqxProductGrid").jqxGrid('updatebounddata');
+                                }, 200);
                                 oldVal = input.val();
                             }
                         } else {
-                            $("#jqxgrid2").jqxGrid('updatebounddata');
+                            $("#jqxProductGrid").jqxGrid('updatebounddata');
                         }
                     });
                 },
@@ -248,7 +254,20 @@
                 localizationobj.filterbooleancomparisonoperators = filterbooleancomparisonoperators;
 
                 // apply localization.
-                $("#jqxgrid2").jqxGrid('localizestrings', localizationobj);
+                $("#jqxProductGrid").jqxGrid('localizestrings', localizationobj);
+            });
+
+            $('#window').jqxWindow({
+                showCollapseButton: false, isModal: true, showCloseButton: false, autoOpen:false, maxHeight: 600, maxWidth: 900, minHeight: 200, minWidth: 200, height: 300, width: 500,
+                initContent: function () {
+                    $('#window').jqxWindow('focus');
+                    $('#product-cancel').jqxButton();
+                    $('#product-save').jqxButton();
+
+                    $('#product-cancel').click(function() {
+                        $('#window').jqxWindow('close');
+                    });
+                }
             });
 
         });

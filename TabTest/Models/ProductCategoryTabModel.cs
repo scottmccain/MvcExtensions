@@ -4,16 +4,16 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using KnockoutHelpers;
-using Newtonsoft.Json.Serialization;
 
 namespace TabTest.Models
 {
-    public class Tab1Model
+    public class ProductCategoryTabModel
     {
         [Knockout(PropertyName = "text")]
         public string SomeText
         {
-            get; set;
+            get;
+            set;
         }
 
         [Knockout(PropertyName = "selectedItem")]
@@ -22,12 +22,14 @@ namespace TabTest.Models
         [Knockout(PropertyName = "items")]
         public IList<Department> Departments
         {
-            get; set;
+            get;
+            set;
         }
 
         public IList<SelectListItem> Items
         {
-            get; set;
+            get;
+            set;
         }
     }
 }

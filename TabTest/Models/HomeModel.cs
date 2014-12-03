@@ -12,10 +12,10 @@ namespace TabTest.Models
         public List<TabListItem> TabList { get; set; }
 
         [Knockout]
-        public Tab1Model Tab1Model { get; set; }
+        public ProductTabModel ProductTabModel { get; set; }
 
         [Knockout]
-        public Tab2Model Tab2Model { get; set; }
+        public ProductCategoryTabModel ProductCategoryTabModel { get; set; }
 
     }
 }
